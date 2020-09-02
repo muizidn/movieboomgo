@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/muizidn/movieboomgo/apihttp
+gazelle(name = "gazelle")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "github.com/muizidn/movieboomgo/apihttp",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "apihttp",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)

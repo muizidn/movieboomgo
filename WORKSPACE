@@ -26,3 +26,8 @@ go_rules_dependencies()
 go_register_toolchains()
 
 gazelle_dependencies()
+
+load("//:deps.bzl", "go_dependencies")
+
+# gazelle:repository_macro deps.bzl%go_dependencies
+go_dependencies()
