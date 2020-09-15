@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["movie_service-remote.go"],
+    importpath = "github.com/muizidn/movieboomgo/thrift/gen-go/movie/movie_service-remote",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//thrift/gen-go/movie:go_default_library",
+        "@com_github_apache_thrift//lib/go/thrift:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "movie_service-remote",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)
