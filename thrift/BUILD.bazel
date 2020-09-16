@@ -3,7 +3,6 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 go_library(
     name = "go_default_library",
     srcs = [
-        "GET_movie.go",
         "client.go",
         "main.go",
         "movie_handler.go",
@@ -13,6 +12,7 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//thrift/gen-go/movie:go_default_library",
+        "//tmdb:go_default_library",
         "@com_github_apache_thrift//lib/go/thrift:go_default_library",
     ],
 )

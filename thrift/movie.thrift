@@ -53,6 +53,12 @@ exception TMDBMovieError {
     2: string message
 }
 
+struct TMDBGetDetailsRequest {
+    1: i32 id,
+    2: string apiKey,
+    3: optional string language
+}
+
 service MovieService {
-    TMDBMovie get(1: string apiKey, 2: string language) throws (1:TMDBMovieError error)
+    TMDBMovie getDetails(1: TMDBGetDetailsRequest req) throws (1:TMDBMovieError error)
 }

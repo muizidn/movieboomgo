@@ -1746,11 +1746,182 @@ func (p *TMDBMovieError) Error() string {
   return p.String()
 }
 
+// Attributes:
+//  - ID
+//  - ApiKey
+//  - Language
+type TMDBGetDetailsRequest struct {
+  ID int32 `thrift:"id,1" db:"id" json:"id"`
+  ApiKey string `thrift:"apiKey,2" db:"apiKey" json:"apiKey"`
+  Language *string `thrift:"language,3" db:"language" json:"language,omitempty"`
+}
+
+func NewTMDBGetDetailsRequest() *TMDBGetDetailsRequest {
+  return &TMDBGetDetailsRequest{}
+}
+
+
+func (p *TMDBGetDetailsRequest) GetID() int32 {
+  return p.ID
+}
+
+func (p *TMDBGetDetailsRequest) GetApiKey() string {
+  return p.ApiKey
+}
+var TMDBGetDetailsRequest_Language_DEFAULT string
+func (p *TMDBGetDetailsRequest) GetLanguage() string {
+  if !p.IsSetLanguage() {
+    return TMDBGetDetailsRequest_Language_DEFAULT
+  }
+return *p.Language
+}
+func (p *TMDBGetDetailsRequest) IsSetLanguage() bool {
+  return p.Language != nil
+}
+
+func (p *TMDBGetDetailsRequest) Read(iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.I32 {
+        if err := p.ReadField1(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    case 2:
+      if fieldTypeId == thrift.STRING {
+        if err := p.ReadField2(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    case 3:
+      if fieldTypeId == thrift.STRING {
+        if err := p.ReadField3(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *TMDBGetDetailsRequest)  ReadField1(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadI32(); err != nil {
+  return thrift.PrependError("error reading field 1: ", err)
+} else {
+  p.ID = v
+}
+  return nil
+}
+
+func (p *TMDBGetDetailsRequest)  ReadField2(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
+  return thrift.PrependError("error reading field 2: ", err)
+} else {
+  p.ApiKey = v
+}
+  return nil
+}
+
+func (p *TMDBGetDetailsRequest)  ReadField3(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
+  return thrift.PrependError("error reading field 3: ", err)
+} else {
+  p.Language = &v
+}
+  return nil
+}
+
+func (p *TMDBGetDetailsRequest) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("TMDBGetDetailsRequest"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(oprot); err != nil { return err }
+    if err := p.writeField2(oprot); err != nil { return err }
+    if err := p.writeField3(oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *TMDBGetDetailsRequest) writeField1(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("id", thrift.I32, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:id: ", p), err) }
+  if err := oprot.WriteI32(int32(p.ID)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.id (1) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:id: ", p), err) }
+  return err
+}
+
+func (p *TMDBGetDetailsRequest) writeField2(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("apiKey", thrift.STRING, 2); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:apiKey: ", p), err) }
+  if err := oprot.WriteString(string(p.ApiKey)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.apiKey (2) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:apiKey: ", p), err) }
+  return err
+}
+
+func (p *TMDBGetDetailsRequest) writeField3(oprot thrift.TProtocol) (err error) {
+  if p.IsSetLanguage() {
+    if err := oprot.WriteFieldBegin("language", thrift.STRING, 3); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:language: ", p), err) }
+    if err := oprot.WriteString(string(*p.Language)); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T.language (3) field write error: ", p), err) }
+    if err := oprot.WriteFieldEnd(); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 3:language: ", p), err) }
+  }
+  return err
+}
+
+func (p *TMDBGetDetailsRequest) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("TMDBGetDetailsRequest(%+v)", *p)
+}
+
 type MovieService interface {
   // Parameters:
-  //  - ApiKey
-  //  - Language
-  Get(ctx context.Context, apiKey string, language string) (r *TMDBMovie, err error)
+  //  - Req
+  GetDetails(ctx context.Context, req *TMDBGetDetailsRequest) (r *TMDBMovie, err error)
 }
 
 type MovieServiceClient struct {
@@ -1779,14 +1950,12 @@ func (p *MovieServiceClient) Client_() thrift.TClient {
   return p.c
 }
 // Parameters:
-//  - ApiKey
-//  - Language
-func (p *MovieServiceClient) Get(ctx context.Context, apiKey string, language string) (r *TMDBMovie, err error) {
-  var _args4 MovieServiceGetArgs
-  _args4.ApiKey = apiKey
-  _args4.Language = language
-  var _result5 MovieServiceGetResult
-  if err = p.Client_().Call(ctx, "get", &_args4, &_result5); err != nil {
+//  - Req
+func (p *MovieServiceClient) GetDetails(ctx context.Context, req *TMDBGetDetailsRequest) (r *TMDBMovie, err error) {
+  var _args4 MovieServiceGetDetailsArgs
+  _args4.Req = req
+  var _result5 MovieServiceGetDetailsResult
+  if err = p.Client_().Call(ctx, "getDetails", &_args4, &_result5); err != nil {
     return
   }
   switch {
@@ -1818,7 +1987,7 @@ func (p *MovieServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunct
 func NewMovieServiceProcessor(handler MovieService) *MovieServiceProcessor {
 
   self6 := &MovieServiceProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
-  self6.processorMap["get"] = &movieServiceProcessorGet{handler:handler}
+  self6.processorMap["getDetails"] = &movieServiceProcessorGetDetails{handler:handler}
 return self6
 }
 
@@ -1839,16 +2008,16 @@ func (p *MovieServiceProcessor) Process(ctx context.Context, iprot, oprot thrift
 
 }
 
-type movieServiceProcessorGet struct {
+type movieServiceProcessorGetDetails struct {
   handler MovieService
 }
 
-func (p *movieServiceProcessorGet) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-  args := MovieServiceGetArgs{}
+func (p *movieServiceProcessorGetDetails) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+  args := MovieServiceGetDetailsArgs{}
   if err = args.Read(iprot); err != nil {
     iprot.ReadMessageEnd()
     x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-    oprot.WriteMessageBegin("get", thrift.EXCEPTION, seqId)
+    oprot.WriteMessageBegin("getDetails", thrift.EXCEPTION, seqId)
     x.Write(oprot)
     oprot.WriteMessageEnd()
     oprot.Flush(ctx)
@@ -1856,16 +2025,16 @@ func (p *movieServiceProcessorGet) Process(ctx context.Context, seqId int32, ipr
   }
 
   iprot.ReadMessageEnd()
-  result := MovieServiceGetResult{}
+  result := MovieServiceGetDetailsResult{}
 var retval *TMDBMovie
   var err2 error
-  if retval, err2 = p.handler.Get(ctx, args.ApiKey, args.Language); err2 != nil {
+  if retval, err2 = p.handler.GetDetails(ctx, args.Req); err2 != nil {
   switch v := err2.(type) {
     case *TMDBMovieError:
   result.Error = v
     default:
-    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing get: " + err2.Error())
-    oprot.WriteMessageBegin("get", thrift.EXCEPTION, seqId)
+    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getDetails: " + err2.Error())
+    oprot.WriteMessageBegin("getDetails", thrift.EXCEPTION, seqId)
     x.Write(oprot)
     oprot.WriteMessageEnd()
     oprot.Flush(ctx)
@@ -1874,7 +2043,7 @@ var retval *TMDBMovie
   } else {
     result.Success = retval
 }
-  if err2 = oprot.WriteMessageBegin("get", thrift.REPLY, seqId); err2 != nil {
+  if err2 = oprot.WriteMessageBegin("getDetails", thrift.REPLY, seqId); err2 != nil {
     err = err2
   }
   if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1896,26 +2065,27 @@ var retval *TMDBMovie
 // HELPER FUNCTIONS AND STRUCTURES
 
 // Attributes:
-//  - ApiKey
-//  - Language
-type MovieServiceGetArgs struct {
-  ApiKey string `thrift:"apiKey,1" db:"apiKey" json:"apiKey"`
-  Language string `thrift:"language,2" db:"language" json:"language"`
+//  - Req
+type MovieServiceGetDetailsArgs struct {
+  Req *TMDBGetDetailsRequest `thrift:"req,1" db:"req" json:"req"`
 }
 
-func NewMovieServiceGetArgs() *MovieServiceGetArgs {
-  return &MovieServiceGetArgs{}
+func NewMovieServiceGetDetailsArgs() *MovieServiceGetDetailsArgs {
+  return &MovieServiceGetDetailsArgs{}
 }
 
-
-func (p *MovieServiceGetArgs) GetApiKey() string {
-  return p.ApiKey
+var MovieServiceGetDetailsArgs_Req_DEFAULT *TMDBGetDetailsRequest
+func (p *MovieServiceGetDetailsArgs) GetReq() *TMDBGetDetailsRequest {
+  if !p.IsSetReq() {
+    return MovieServiceGetDetailsArgs_Req_DEFAULT
+  }
+return p.Req
+}
+func (p *MovieServiceGetDetailsArgs) IsSetReq() bool {
+  return p.Req != nil
 }
 
-func (p *MovieServiceGetArgs) GetLanguage() string {
-  return p.Language
-}
-func (p *MovieServiceGetArgs) Read(iprot thrift.TProtocol) error {
+func (p *MovieServiceGetDetailsArgs) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -1929,18 +2099,8 @@ func (p *MovieServiceGetArgs) Read(iprot thrift.TProtocol) error {
     if fieldTypeId == thrift.STOP { break; }
     switch fieldId {
     case 1:
-      if fieldTypeId == thrift.STRING {
+      if fieldTypeId == thrift.STRUCT {
         if err := p.ReadField1(iprot); err != nil {
-          return err
-        }
-      } else {
-        if err := iprot.Skip(fieldTypeId); err != nil {
-          return err
-        }
-      }
-    case 2:
-      if fieldTypeId == thrift.STRING {
-        if err := p.ReadField2(iprot); err != nil {
           return err
         }
       } else {
@@ -1963,30 +2123,19 @@ func (p *MovieServiceGetArgs) Read(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *MovieServiceGetArgs)  ReadField1(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 1: ", err)
-} else {
-  p.ApiKey = v
-}
+func (p *MovieServiceGetDetailsArgs)  ReadField1(iprot thrift.TProtocol) error {
+  p.Req = &TMDBGetDetailsRequest{}
+  if err := p.Req.Read(iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Req), err)
+  }
   return nil
 }
 
-func (p *MovieServiceGetArgs)  ReadField2(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 2: ", err)
-} else {
-  p.Language = v
-}
-  return nil
-}
-
-func (p *MovieServiceGetArgs) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("get_args"); err != nil {
+func (p *MovieServiceGetDetailsArgs) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("getDetails_args"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
     if err := p.writeField1(oprot); err != nil { return err }
-    if err := p.writeField2(oprot); err != nil { return err }
   }
   if err := oprot.WriteFieldStop(); err != nil {
     return thrift.PrependError("write field stop error: ", err) }
@@ -1995,68 +2144,59 @@ func (p *MovieServiceGetArgs) Write(oprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *MovieServiceGetArgs) writeField1(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("apiKey", thrift.STRING, 1); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:apiKey: ", p), err) }
-  if err := oprot.WriteString(string(p.ApiKey)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.apiKey (1) field write error: ", p), err) }
+func (p *MovieServiceGetDetailsArgs) writeField1(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:req: ", p), err) }
+  if err := p.Req.Write(oprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Req), err)
+  }
   if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:apiKey: ", p), err) }
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:req: ", p), err) }
   return err
 }
 
-func (p *MovieServiceGetArgs) writeField2(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("language", thrift.STRING, 2); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:language: ", p), err) }
-  if err := oprot.WriteString(string(p.Language)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.language (2) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:language: ", p), err) }
-  return err
-}
-
-func (p *MovieServiceGetArgs) String() string {
+func (p *MovieServiceGetDetailsArgs) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("MovieServiceGetArgs(%+v)", *p)
+  return fmt.Sprintf("MovieServiceGetDetailsArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
 //  - Error
-type MovieServiceGetResult struct {
+type MovieServiceGetDetailsResult struct {
   Success *TMDBMovie `thrift:"success,0" db:"success" json:"success,omitempty"`
   Error *TMDBMovieError `thrift:"error,1" db:"error" json:"error,omitempty"`
 }
 
-func NewMovieServiceGetResult() *MovieServiceGetResult {
-  return &MovieServiceGetResult{}
+func NewMovieServiceGetDetailsResult() *MovieServiceGetDetailsResult {
+  return &MovieServiceGetDetailsResult{}
 }
 
-var MovieServiceGetResult_Success_DEFAULT *TMDBMovie
-func (p *MovieServiceGetResult) GetSuccess() *TMDBMovie {
+var MovieServiceGetDetailsResult_Success_DEFAULT *TMDBMovie
+func (p *MovieServiceGetDetailsResult) GetSuccess() *TMDBMovie {
   if !p.IsSetSuccess() {
-    return MovieServiceGetResult_Success_DEFAULT
+    return MovieServiceGetDetailsResult_Success_DEFAULT
   }
 return p.Success
 }
-var MovieServiceGetResult_Error_DEFAULT *TMDBMovieError
-func (p *MovieServiceGetResult) GetError() *TMDBMovieError {
+var MovieServiceGetDetailsResult_Error_DEFAULT *TMDBMovieError
+func (p *MovieServiceGetDetailsResult) GetError() *TMDBMovieError {
   if !p.IsSetError() {
-    return MovieServiceGetResult_Error_DEFAULT
+    return MovieServiceGetDetailsResult_Error_DEFAULT
   }
 return p.Error
 }
-func (p *MovieServiceGetResult) IsSetSuccess() bool {
+func (p *MovieServiceGetDetailsResult) IsSetSuccess() bool {
   return p.Success != nil
 }
 
-func (p *MovieServiceGetResult) IsSetError() bool {
+func (p *MovieServiceGetDetailsResult) IsSetError() bool {
   return p.Error != nil
 }
 
-func (p *MovieServiceGetResult) Read(iprot thrift.TProtocol) error {
+func (p *MovieServiceGetDetailsResult) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -2104,7 +2244,7 @@ func (p *MovieServiceGetResult) Read(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *MovieServiceGetResult)  ReadField0(iprot thrift.TProtocol) error {
+func (p *MovieServiceGetDetailsResult)  ReadField0(iprot thrift.TProtocol) error {
   p.Success = &TMDBMovie{}
   if err := p.Success.Read(iprot); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -2112,7 +2252,7 @@ func (p *MovieServiceGetResult)  ReadField0(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *MovieServiceGetResult)  ReadField1(iprot thrift.TProtocol) error {
+func (p *MovieServiceGetDetailsResult)  ReadField1(iprot thrift.TProtocol) error {
   p.Error = &TMDBMovieError{}
   if err := p.Error.Read(iprot); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Error), err)
@@ -2120,8 +2260,8 @@ func (p *MovieServiceGetResult)  ReadField1(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *MovieServiceGetResult) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("get_result"); err != nil {
+func (p *MovieServiceGetDetailsResult) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("getDetails_result"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
     if err := p.writeField0(oprot); err != nil { return err }
@@ -2134,7 +2274,7 @@ func (p *MovieServiceGetResult) Write(oprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *MovieServiceGetResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *MovieServiceGetDetailsResult) writeField0(oprot thrift.TProtocol) (err error) {
   if p.IsSetSuccess() {
     if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
       return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err) }
@@ -2147,7 +2287,7 @@ func (p *MovieServiceGetResult) writeField0(oprot thrift.TProtocol) (err error) 
   return err
 }
 
-func (p *MovieServiceGetResult) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *MovieServiceGetDetailsResult) writeField1(oprot thrift.TProtocol) (err error) {
   if p.IsSetError() {
     if err := oprot.WriteFieldBegin("error", thrift.STRUCT, 1); err != nil {
       return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:error: ", p), err) }
@@ -2160,11 +2300,11 @@ func (p *MovieServiceGetResult) writeField1(oprot thrift.TProtocol) (err error) 
   return err
 }
 
-func (p *MovieServiceGetResult) String() string {
+func (p *MovieServiceGetDetailsResult) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("MovieServiceGetResult(%+v)", *p)
+  return fmt.Sprintf("MovieServiceGetDetailsResult(%+v)", *p)
 }
 
 

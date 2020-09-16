@@ -14,7 +14,14 @@ var defaultCtx = context.Background()
 
 func handleClient(client *movie.MovieServiceClient) (err error) {
 	fmt.Println("Client...")
-	res, err := client.Get(defaultCtx, "8e43b175c34985bfc0da05ed11b3eca9", "en")
+	req := movie.NewTMDBGetDetailsRequest()
+	req.ApiKey = "8e43b175c34985bfc0da05ed11b3eca9"
+	{
+		lang := "en"
+		req.Language = &lang
+	}
+	req.ID = 10020
+	res, err := client.GetDetails(defaultCtx, req)
 	fmt.Println(res, err)
 	if err != nil {
 		return err

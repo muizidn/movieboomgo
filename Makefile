@@ -14,7 +14,10 @@ bzl_build_apihttp: bzl_gazelle
 bzl_run_apihttp: bzl_build_project
 	bazel run //apihttp
 
-bzl_build_thrift: bzl_gazelle
+gen_thrift:
+	make -C thrift gen_thrift
+
+bzl_build_thrift: gen_thrift bzl_gazelle
 	bazel build //thrift
 
 bzl_run_thrift_client: bzl_build_thrift

@@ -23,7 +23,7 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:")
   flag.PrintDefaults()
   fmt.Fprintln(os.Stderr, "\nFunctions:")
-  fmt.Fprintln(os.Stderr, "  TMDBMovie get(string apiKey, string language)")
+  fmt.Fprintln(os.Stderr, "  TMDBMovie getDetails(TMDBGetDetailsRequest req)")
   fmt.Fprintln(os.Stderr)
   os.Exit(0)
 }
@@ -145,16 +145,29 @@ func main() {
   }
   
   switch cmd {
-  case "get":
-    if flag.NArg() - 1 != 2 {
-      fmt.Fprintln(os.Stderr, "Get requires 2 args")
+  case "getDetails":
+    if flag.NArg() - 1 != 1 {
+      fmt.Fprintln(os.Stderr, "GetDetails requires 1 args")
       flag.Usage()
     }
-    argvalue0 := flag.Arg(1)
+    arg8 := flag.Arg(1)
+    mbTrans9 := thrift.NewTMemoryBufferLen(len(arg8))
+    defer mbTrans9.Close()
+    _, err10 := mbTrans9.WriteString(arg8)
+    if err10 != nil {
+      Usage()
+      return
+    }
+    factory11 := thrift.NewTJSONProtocolFactory()
+    jsProt12 := factory11.GetProtocol(mbTrans9)
+    argvalue0 := movie.NewTMDBGetDetailsRequest()
+    err13 := argvalue0.Read(jsProt12)
+    if err13 != nil {
+      Usage()
+      return
+    }
     value0 := argvalue0
-    argvalue1 := flag.Arg(2)
-    value1 := argvalue1
-    fmt.Print(client.Get(context.Background(), value0, value1))
+    fmt.Print(client.GetDetails(context.Background(), value0))
     fmt.Print("\n")
     break
   case "":

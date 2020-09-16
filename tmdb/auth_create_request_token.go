@@ -10,26 +10,26 @@ import (
 	"go.uber.org/zap"
 )
 
-type RespCreateRequestToken struct {
+type RespAuthCreateRequestToken struct {
 	Success      bool   `json:"success"`
 	ExpiresAt    string `json:"expires_at"`
 	RequestToken string `json:"request_token"`
 }
 
-type RespCreateRequestTokenErr struct {
+type RespAuthCreateRequestTokenErr struct {
 	StatusCode    int    `json:"status_code"`
 	StatusMessage string `json:"status_message"`
 	Success       bool   `json:"success"`
 }
 
-func CreateRequestToken(apiKey string) (*RespCreateRequestToken, *RespCreateRequestTokenErr, error) {
+func AuthCreateRequestToken(apiKey string) (*RespAuthCreateRequestToken, *RespAuthCreateRequestTokenErr, error) {
 
 	url := "https://api.themoviedb.org/3/authentication"
 
 	logger, _ := zap.NewProduction()
 	defer logger.Sync() // flushes buffer, if any
 	sugar := logger.Sugar()
-	sugar.Infow("tmdb_create_request_token",
+	sugar.Infow("tmdb_AuthCreateRequestToken",
 		"url", url,
 		"attempt", 3,
 		"backoff", time.Second,
@@ -49,11 +49,11 @@ func CreateRequestToken(apiKey string) (*RespCreateRequestToken, *RespCreateRequ
 
 	switch resp.StatusCode {
 	case 200:
-		var result RespCreateRequestToken
+		var result RespAuthCreateRequestToken
 		json.Unmarshal(respBody, &result)
 		return &result, nil, nil
 	case 401:
-		var result RespCreateRequestTokenErr
+		var result RespAuthCreateRequestTokenErr
 		json.Unmarshal(respBody, &result)
 		return nil, &result, nil
 	default:
